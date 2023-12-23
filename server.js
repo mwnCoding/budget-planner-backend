@@ -6,6 +6,9 @@ const express = require("express");
 const app = express();
 
 const indexRouter = require("./routes/index");
+const userRouter =  require("./routes/users");
+const incomeRouter = require("./routes/incomes");
+const expenseRouter = require("./routes/expenses");
 
 console.log(process.env.DATABASE_URL)
 
@@ -17,6 +20,9 @@ db.on("error", error => console.error(error));
 db.once("open", () => console.log("Connected to Mongoose"));
 
 app.use("/", indexRouter);
+app.use("/users", userRouter);
+app.use("/incomes", incomeRouter);
+app.use("/expenses", expenseRouter);
 
 app.listen(5000, () => {console.log("Server listening to port 5000")});
 
