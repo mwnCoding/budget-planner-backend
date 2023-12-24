@@ -5,6 +5,12 @@ if (process.env.NODE_ENV !== "production") {
 const express = require("express");
 const app = express();
 
+const bodyParser = require("body-parser");
+
+app.use(bodyParser.json())
+app.use(bodyParser.urlencoded({ extended: true }))
+
+
 const indexRouter = require("./routes/index");
 const userRouter =  require("./routes/users");
 const incomeRouter = require("./routes/incomes");

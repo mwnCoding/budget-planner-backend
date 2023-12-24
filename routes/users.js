@@ -1,38 +1,70 @@
 const express = require("express");
 const router = express.Router();
 
+const User = require("../models/user")
+
 //Get all users route
-router.get("/", (req, res) => {
-    res.send("Get all users");
+router.get("/", async (req, res) => {
+    try {
+        const users = await User.find({});
+        res.send(users);
+    } catch {
+        res.send("Error getting all users");
+    }
 });
 
 
 //Create new user
-router.post("/new", (req, res) => {
-    const newUser = {
+router.post("/new", async (req, res) => {
+    console.log(req.body.name);
+    const newUser = new User({
         name: req.body.name,
         password: req.body.password
+    })
+    try {
+        const savedUser = await newUser.save();
+        res.send("Created User sucesfully");
+        console.log("Sucessfully saved user ", savedUser);
+    } catch {
+        res.send("Error saving new user to database");
+        console.log("Error saving new user to database");
     }
-    console.log(newUser);
-    res.send("Create new user");
 });
 
 //Get user with specific ID
-router.get("/:id", (req, res) => {
+router.get("/:id", async (req, res) => {
     const id = req.params.id;
-    res.send(`Get user with the ID ${id}`)
+    try {
+        const user = await User.findById(id);
+        res.send(user);
+    } catch {
+        res.send("Error getting specified user");
+    }
 });
 
 //Delete user with specific ID
-router.delete("/delete/:id", (req, res) => {
+router.delete("/delete/:id", async (req, res) => {
     const id = req.params.id;
-    res.send(`Deleted user with the ID ${id}`);
+    try {
+        const deletedUser = await User.findByIdAndDelete(id);
+        res.send("User succesfully deleted");
+    } catch {
+        res.send("Error deleting user");
+    }
 });
 
 //Update user with specific ID
-router.patch("/update/:id", (req, res) => {
+router.patch("/update/:id", async (req, res) => {
     const id = req.params.id;
-    res.send(`Updated user with the ID ${id}`);
+    try {
+        const updatedUser = await User.findByIdAndUpdate(id, {
+            name: req.body.name,
+            password: req.body.password
+        })
+        res.send("User sucessfully updated");
+    } catch {
+        res.send("Error updating user");
+    }
 });
 
 module.exports = router;
