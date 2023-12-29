@@ -8,6 +8,18 @@ const userSchema = new mongoose.Schema({
     password: {
         type: String,
         required: true
+    },
+    incomes: [{
+        type: mongoose.Schema.Types.ObjectId,
+        ref: "Income"
+    }],
+    expenes: [{
+        type: mongoose.Schema.Types.ObjectId,
+        ref: "Expense"
+    }],
+    balance: {
+        type: Number,
+        default: 0
     }
 });
 
